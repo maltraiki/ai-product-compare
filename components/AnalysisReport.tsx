@@ -314,18 +314,18 @@ export default function AnalysisReport({ analysis, products }: AnalysisReportPro
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
-        <div className="flex items-center gap-3 mb-2">
-          <Activity className="w-8 h-8" />
-          <h2 className="text-2xl font-bold">AI Expert Analysis</h2>
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 sm:p-6">
+        <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+          <Activity className="w-6 sm:w-8 h-6 sm:h-8" />
+          <h2 className="text-xl sm:text-2xl font-bold">AI Expert Analysis</h2>
         </div>
-        <p className="text-blue-100">Comprehensive technical comparison by AI</p>
+        <p className="text-blue-100 text-sm sm:text-base">Comprehensive technical comparison</p>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="border-b bg-gray-50 px-6 py-2 flex gap-4 overflow-x-auto">
+      <div className="border-b bg-gray-50 px-3 sm:px-6 py-2 flex gap-2 sm:gap-4 overflow-x-auto scrollbar-hide">
         {[
           { id: 'summary', label: 'Executive Summary', icon: Info },
           { id: 'specs', label: 'Technical Specs', icon: Cpu },
@@ -336,20 +336,27 @@ export default function AnalysisReport({ analysis, products }: AnalysisReportPro
           <button
             key={tab.id}
             onClick={() => setExpandedSection(expandedSection === tab.id ? null : tab.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap text-xs sm:text-sm ${
               expandedSection === tab.id
                 ? 'bg-white text-blue-600 shadow-md'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            <tab.icon className="w-4 h-4" />
-            {tab.label}
+            <tab.icon className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
+            <span className="hidden sm:inline">{tab.label}</span>
+            <span className="sm:hidden">
+              {tab.id === 'summary' ? 'Summary' :
+               tab.id === 'specs' ? 'Specs' :
+               tab.id === 'performance' ? 'Perf' :
+               tab.id === 'proscons' ? 'Pros/Cons' :
+               'Verdict'}
+            </span>
           </button>
         ))}
       </div>
 
       {/* Content */}
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {expandedSection === 'summary' && (
           <div className="animate-fadeIn">
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">

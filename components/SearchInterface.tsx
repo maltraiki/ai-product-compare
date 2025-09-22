@@ -13,10 +13,10 @@ export default function SearchInterface({ onSearch, isLoading = false }: SearchI
   const [isFocused, setIsFocused] = useState(false);
 
   const exampleQueries = [
-    'Best wireless headphones under $300 with noise cancellation',
-    'Compare gaming laptops for students with good battery life',
-    'Top-rated coffee makers for home use under $200',
-    'Professional cameras for wildlife photography',
+    'iPhone 16 vs Samsung S24',
+    'Best gaming laptop under $1500',
+    'Wireless headphones with ANC',
+    'Coffee maker for home use',
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -34,28 +34,28 @@ export default function SearchInterface({ onSearch, isLoading = false }: SearchI
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto px-2 sm:px-0">
       <form onSubmit={handleSubmit} className="relative">
-        <div className={`relative transition-all duration-200 ${isFocused ? 'scale-105' : ''}`}>
+        <div className={`relative transition-all duration-200 ${isFocused ? 'sm:scale-105' : ''}`}>
           <textarea
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            placeholder="Describe what you're looking for... (e.g., 'wireless headphones with great battery life under $200')"
-            className={`w-full px-6 py-4 pr-32 text-lg text-black bg-white placeholder-gray-500 rounded-2xl border-2 resize-none transition-all duration-200 ${
+            placeholder="What are you looking for? (e.g., 'iPhone 16 vs Samsung S24')"
+            className={`w-full px-4 sm:px-6 py-3 sm:py-4 pr-24 sm:pr-32 text-base sm:text-lg text-black bg-white placeholder-gray-500 rounded-xl sm:rounded-2xl border-2 resize-none transition-all duration-200 ${
               isFocused
                 ? 'border-blue-500 shadow-lg shadow-blue-100 bg-white'
                 : 'border-gray-300 hover:border-gray-400 bg-white'
             } focus:outline-none focus:bg-white`}
             style={{ color: '#000000', backgroundColor: '#FFFFFF' }}
-            rows={3}
+            rows={2}
             disabled={isLoading}
           />
           <button
             type="submit"
             disabled={isLoading || !query.trim()}
-            className={`absolute bottom-4 right-4 px-6 py-2 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 ${
+            className={`absolute bottom-3 right-3 sm:bottom-4 sm:right-4 px-4 sm:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base ${
               isLoading || !query.trim()
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
@@ -63,12 +63,13 @@ export default function SearchInterface({ onSearch, isLoading = false }: SearchI
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Searching...
+                <Loader2 className="w-3.5 sm:w-4 h-3.5 sm:h-4 animate-spin" />
+                <span className="hidden sm:inline">Searching...</span>
+                <span className="sm:hidden">...</span>
               </>
             ) : (
               <>
-                <Search className="w-4 h-4" />
+                <Search className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
                 Search
               </>
             )}
@@ -77,17 +78,17 @@ export default function SearchInterface({ onSearch, isLoading = false }: SearchI
       </form>
 
       {!query && !isLoading && (
-        <div className="mt-8">
-          <div className="flex items-center gap-2 mb-4 text-gray-600">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">Try these example searches:</span>
+        <div className="mt-6 sm:mt-8">
+          <div className="flex items-center gap-2 mb-3 sm:mb-4 text-gray-600">
+            <Sparkles className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
+            <span className="text-xs sm:text-sm font-medium">Try these examples:</span>
           </div>
-          <div className="grid gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
             {exampleQueries.map((example, index) => (
               <button
                 key={index}
                 onClick={() => handleExampleClick(example)}
-                className="text-left p-3 px-4 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 hover:from-blue-50 hover:to-purple-50 border border-gray-200 hover:border-blue-200 transition-all duration-200 group"
+                className="text-left p-2.5 sm:p-3 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 hover:from-blue-50 hover:to-purple-50 border border-gray-200 hover:border-blue-200 transition-all duration-200 group text-sm sm:text-base"
               >
                 <span className="text-gray-700 group-hover:text-blue-700 transition-colors">
                   {example}
@@ -99,14 +100,15 @@ export default function SearchInterface({ onSearch, isLoading = false }: SearchI
       )}
 
       {isLoading && (
-        <div className="mt-8 p-4 rounded-xl bg-blue-50 border border-blue-200">
-          <div className="flex items-center gap-3">
+        <div className="mt-6 sm:mt-8 p-3 sm:p-4 rounded-lg sm:rounded-xl bg-blue-50 border border-blue-200">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative">
               <div className="w-2 h-2 bg-blue-600 rounded-full animate-ping absolute"></div>
               <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
             </div>
-            <p className="text-blue-700">
-              AI is analyzing your request and searching multiple sources for the best products...
+            <p className="text-blue-700 text-sm sm:text-base">
+              <span className="hidden sm:inline">AI is analyzing your request and searching multiple sources...</span>
+              <span className="sm:hidden">Searching products...</span>
             </p>
           </div>
         </div>

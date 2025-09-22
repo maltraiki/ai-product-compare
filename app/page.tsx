@@ -43,13 +43,13 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <header className="text-center mb-12">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 max-w-7xl">
+        <header className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3 sm:mb-4">
             AI Product Comparison
           </h1>
-          <p className="text-xl text-gray-600">
-            Find the perfect product with AI-powered analysis from multiple sources
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 px-2 sm:px-0">
+            Find the perfect product with AI-powered analysis
           </p>
         </header>
 
@@ -76,15 +76,15 @@ export default function Home() {
                     products={searchResponse.products}
                   />
 
-                  {/* Single source link at the bottom */}
-                  <div className="mt-8 p-6 bg-white rounded-xl border border-gray-200 text-center">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Check Current Prices</h3>
-                    <div className="flex justify-center gap-4 flex-wrap">
+                  {/* Retail links - mobile optimized */}
+                  <div className="mt-6 sm:mt-8 p-4 sm:p-6 bg-white rounded-xl border border-gray-200 text-center">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Check Current Prices</h3>
+                    <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
                       <a
                         href={`https://www.noon.com/saudi-en/search?q=${encodeURIComponent(searchResponse.searchParams?.searchTerms || '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all"
+                        className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg font-medium sm:font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all text-sm sm:text-base"
                       >
                         View on Noon.com
                       </a>
@@ -92,7 +92,7 @@ export default function Home() {
                         href={`https://www.amazon.sa/s?k=${encodeURIComponent(searchResponse.searchParams?.searchTerms || '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all"
+                        className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium sm:font-semibold hover:from-blue-700 hover:to-purple-700 transition-all text-sm sm:text-base"
                       >
                         View on Amazon.sa
                       </a>
@@ -100,12 +100,12 @@ export default function Home() {
                         href={`https://www.jarir.com/sa-en/catalogsearch/result/?q=${encodeURIComponent(searchResponse.searchParams?.searchTerms || '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg font-semibold hover:from-red-600 hover:to-pink-600 transition-all"
+                        className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg font-medium sm:font-semibold hover:from-red-600 hover:to-pink-600 transition-all text-sm sm:text-base"
                       >
                         View on Jarir.com
                       </a>
                     </div>
-                    <p className="text-sm text-gray-600 mt-4">
+                    <p className="text-xs sm:text-sm text-gray-600 mt-3 sm:mt-4 px-2 sm:px-0">
                       * Prices and availability may vary. Click links above to see current offerings.
                     </p>
                   </div>
@@ -123,13 +123,16 @@ export default function Home() {
         )}
       </div>
 
-      <footer className="mt-20 py-8 border-t border-gray-200">
+      <footer className="mt-12 sm:mt-20 py-6 sm:py-8 border-t border-gray-200">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-600">
-            AI Product Comparison Platform | Powered by Claude AI, Google Shopping & Amazon
+          <p className="text-sm sm:text-base text-gray-600">
+            AI Product Comparison Platform
           </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Prices and availability subject to change. We may earn commission from purchases.
+          <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
+            Powered by Claude AI, Google & Amazon
+          </p>
+          <p className="text-xs text-gray-400 mt-2 px-2 sm:px-0">
+            Prices subject to change. Commission may be earned.
           </p>
         </div>
       </footer>
