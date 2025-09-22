@@ -73,7 +73,7 @@ export class PhoneDatabase {
           'Titanium design',
           'USB-C port'
         ],
-        source: 'database',
+        source: 'google' as const,
         link: 'https://www.gsmarena.com/apple_iphone_16_pro_max-13119.php',
         brand: 'Apple',
         category: 'Smartphones',
@@ -125,7 +125,7 @@ export class PhoneDatabase {
           'iOS 18',
           'Titanium design'
         ],
-        source: 'database',
+        source: 'google' as const,
         link: 'https://www.gsmarena.com/apple_iphone_16_pro-13118.php',
         brand: 'Apple',
         category: 'Smartphones',
@@ -181,7 +181,7 @@ export class PhoneDatabase {
           'Titanium design',
           'USB-C port'
         ],
-        source: 'database',
+        source: 'google' as const,
         link: 'https://www.gsmarena.com/apple_iphone_15_pro_max-12548.php',
         brand: 'Apple',
         category: 'Smartphones',
@@ -235,7 +235,7 @@ export class PhoneDatabase {
           'iOS 19',
           'New design language'
         ],
-        source: 'database',
+        source: 'google' as const,
         link: '#',
         brand: 'Apple',
         category: 'Smartphones',
@@ -270,7 +270,7 @@ export class PhoneDatabase {
           'S Pen included',
           'Android 14'
         ],
-        source: 'database',
+        source: 'google' as const,
         link: 'https://www.gsmarena.com/samsung_galaxy_s24_ultra-12771.php',
         brand: 'Samsung',
         category: 'Smartphones',
