@@ -120,28 +120,65 @@ export async function POST(request: NextRequest) {
         console.log('Both AI services failed, using basic analysis');
         // Basic fallback analysis
         const firstProduct = normalizedProducts[0];
+        const productId = firstProduct?.id || '';
+        const productTitle = firstProduct?.title || '';
+
         analysis = {
           executiveSummary: `Analysis of "${body.query}". Found ${normalizedProducts.length} related products from various retailers.`,
           overallRecommendation: {
-            productId: firstProduct?.id || '',
+            productId,
             reasoning: 'Selected based on availability and features.',
             confidenceScore: 70
           },
           categoryWinners: {
-            bestDisplay: { productId: firstProduct?.id || '', reasoning: 'Display quality', technicalDetails: 'Standard display', score: 75 },
-            bestCamera: { productId: firstProduct?.id || '', reasoning: 'Camera features', technicalDetails: 'Standard camera', score: 75 },
-            bestPerformance: { productId: firstProduct?.id || '', reasoning: 'Performance', benchmarkData: 'Standard performance', score: 75 },
-            bestBattery: { productId: firstProduct?.id || '', reasoning: 'Battery life', realWorldTesting: 'Standard battery', score: 75 },
-            bestValue: { productId: firstProduct?.id || '', reasoning: 'Value proposition', costBreakdown: 'Competitive pricing', score: 75 },
-            bestBuild: { productId: firstProduct?.id || '', reasoning: 'Build quality', materialsComparison: 'Standard materials', score: 75 }
+            bestDisplay: { productId, reasoning: 'Display quality', technicalDetails: 'Standard display', score: 75 },
+            bestCamera: { productId, reasoning: 'Camera features', technicalDetails: 'Standard camera', score: 75 },
+            bestPerformance: { productId, reasoning: 'Performance', benchmarkData: 'Standard performance', score: 75 },
+            bestBattery: { productId, reasoning: 'Battery life', realWorldTesting: 'Standard battery', score: 75 },
+            bestValue: { productId, reasoning: 'Value proposition', costBreakdown: 'Competitive pricing', score: 75 },
+            bestBuild: { productId, reasoning: 'Build quality', materialsComparison: 'Standard materials', score: 75 }
           },
-          specificationComparisons: {},
-          performanceAnalysis: {},
-          valueAnalysis: {},
-          userRecommendations: {},
-          prosAndCons: {},
+          specificationComparisons: {
+            display: { winner: productTitle, comparison: 'Display analysis', scores: {}, details: 'Display specs' },
+            processor: { winner: productTitle, comparison: 'Processor analysis', scores: {}, details: 'Performance specs' },
+            camera: { winner: productTitle, comparison: 'Camera analysis', scores: {}, details: 'Camera specs' },
+            battery: { winner: productTitle, comparison: 'Battery analysis', scores: {}, details: 'Battery specs' },
+            build: { winner: productTitle, comparison: 'Build analysis', scores: {}, details: 'Build quality' },
+            connectivity: { winner: productTitle, comparison: 'Connectivity', scores: {}, details: 'Network features' },
+            software: { winner: productTitle, comparison: 'Software', scores: {}, details: 'OS and updates' },
+            audio: { winner: productTitle, comparison: 'Audio', scores: {}, details: 'Sound quality' }
+          },
+          performanceAnalysis: {
+            gaming: { category: 'Gaming', winner: productTitle, scores: {}, realWorldTesting: 'Gaming performance' },
+            photography: { category: 'Photography', winner: productTitle, scores: {}, realWorldTesting: 'Photo quality' },
+            batteryLife: { category: 'Battery Life', winner: productTitle, scores: {}, realWorldTesting: 'Battery endurance' },
+            displayQuality: { category: 'Display Quality', winner: productTitle, scores: {}, realWorldTesting: 'Visual quality' },
+            audioQuality: { category: 'Audio Quality', winner: productTitle, scores: {}, realWorldTesting: 'Sound performance' },
+            chargingSpeed: { category: 'Charging Speed', winner: productTitle, scores: {}, realWorldTesting: 'Charging time' }
+          },
+          valueAnalysis: {
+            pricePerformanceRatio: normalizedProducts.reduce((acc: any, p) => ({ ...acc, [p.id]: 75 }), {}),
+            resaleValue: normalizedProducts.reduce((acc: any, p) => ({ ...acc, [p.id]: 'Good' }), {}),
+            totalCostOfOwnership: normalizedProducts.reduce((acc: any, p) => ({ ...acc, [p.id]: p.price }), {}),
+            hiddenCosts: normalizedProducts.reduce((acc: any, p) => ({ ...acc, [p.id]: [] }), {})
+          },
+          userRecommendations: {
+            powerUsers: { recommendedProduct: productId, reasoning: 'High performance', alternatives: [] },
+            casualUsers: { recommendedProduct: productId, reasoning: 'Easy to use', alternatives: [] },
+            cameraEnthusiasts: { recommendedProduct: productId, reasoning: 'Camera features', alternatives: [] },
+            gamers: { recommendedProduct: productId, reasoning: 'Gaming capable', alternatives: [] },
+            budgetConscious: { recommendedProduct: productId, reasoning: 'Good value', alternatives: [] },
+            businessProfessionals: { recommendedProduct: productId, reasoning: 'Professional features', alternatives: [] }
+          },
+          prosAndCons: normalizedProducts.reduce((acc: any, p) => ({
+            ...acc,
+            [p.id]: {
+              pros: [{ feature: 'Features', advantage: 'Good feature set', measurement: 'Quality' }],
+              cons: [{ feature: 'Price', disadvantage: 'Check for deals', measurement: 'Value' }]
+            }
+          }), {}),
           finalVerdict: {
-            overallWinner: firstProduct?.title || '',
+            overallWinner: productTitle,
             percentageScore: 70,
             scenarios: [],
             longTermAnalysis: 'Analysis based on available data.'
