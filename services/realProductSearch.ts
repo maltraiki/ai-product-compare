@@ -4,11 +4,18 @@ import * as cheerio from 'cheerio';
 import { google } from 'googleapis';
 
 export class RealProductSearchClient {
-  private apiKey = process.env.GOOGLE_SHOPPING_API_KEY || 'AIzaSyBUJN5Ae94uMZ_3hsVi7iZHUP8kfNTIC7s';
-  private searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID || '76abaa4752feb43b0';
+  private apiKey: string;
+  private searchEngineId: string;
 
   constructor() {
+    // Use hardcoded fallback API key if environment variable is not set
+    this.apiKey = process.env.GOOGLE_SHOPPING_API_KEY || 'AIzaSyBUJN5Ae94uMZ_3hsVi7iZHUP8kfNTIC7s';
+    this.searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID || '76abaa4752feb43b0';
+
     console.log('Using Google Custom Search API with key authentication');
+    console.log('API Key exists:', !!this.apiKey);
+    console.log('Search Engine ID:', this.searchEngineId);
+    console.log('API Key from env:', !!process.env.GOOGLE_SHOPPING_API_KEY);
   }
 
   async searchProducts(searchParams: SearchParams): Promise<Product[]> {
@@ -57,9 +64,14 @@ export class RealProductSearchClient {
           if (response.data.items) {
             console.log(`Found ${response.data.items.length} results from ${site}`);
             allItems.push(...response.data.items.map((item: any) => ({...item, source: site})));
+          } else {
+            console.log(`No items found from ${site}`);
           }
-        } catch (err) {
-          console.log(`Error searching ${site}:`, err);
+        } catch (err: any) {
+          console.error(`Error searching ${site}:`, err.message || err);
+          if (err.response) {
+            console.error('API Response:', err.response.data);
+          }
         }
       }
 
@@ -104,8 +116,11 @@ export class RealProductSearchClient {
               }
             }
           }
-        } catch (error) {
-          console.log(`Error searching ${site}:`, error);
+        } catch (error: any) {
+          console.error(`Error in individual search for ${site}:`, error.message || error);
+          if (error.response) {
+            console.error('API Response:', error.response.data);
+          }
         }
       }
     }

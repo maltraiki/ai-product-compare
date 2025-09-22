@@ -22,6 +22,14 @@ const dataProcessor = new DataProcessor();
 
 export async function POST(request: NextRequest) {
   try {
+    // Log environment variable status
+    console.log('Environment check:', {
+      hasGoogleKey: !!process.env.GOOGLE_SHOPPING_API_KEY,
+      hasSearchEngineId: !!process.env.GOOGLE_SEARCH_ENGINE_ID,
+      hasClaudeKey: !!process.env.ANTHROPIC_API_KEY,
+      hasGeminiKey: !!process.env.GEMINI_API_KEY
+    });
+
     const body: SearchRequest = await request.json();
 
     if (!body.query || body.query.trim().length === 0) {
