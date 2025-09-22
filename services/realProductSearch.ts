@@ -12,10 +12,12 @@ export class RealProductSearchClient {
     this.apiKey = process.env.GOOGLE_SHOPPING_API_KEY || '';
     this.searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID || '76abaa4752feb43b0';
 
-    console.log('Using Google Custom Search API with key authentication');
-    console.log('API Key exists:', !!this.apiKey);
-    console.log('Search Engine ID:', this.searchEngineId);
-    console.log('API Key from env:', !!process.env.GOOGLE_SHOPPING_API_KEY);
+    if (!this.apiKey) {
+      console.error('WARNING: No Google API key found. Please set GOOGLE_SHOPPING_API_KEY in environment variables.');
+    } else {
+      console.log('Google Custom Search API configured');
+      console.log('Search Engine ID:', this.searchEngineId);
+    }
   }
 
   async searchProducts(searchParams: SearchParams): Promise<Product[]> {
