@@ -1,101 +1,165 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import SearchInterface from '@/components/SearchInterface';
+import ProductCard from '@/components/ProductCard';
+import ComparisonTable from '@/components/ComparisonTable';
+import AnalysisReport from '@/components/AnalysisReport';
+import { SearchResponse, APIResponse } from '@/types';
+import { AlertCircle, BarChart3, Grid3X3, FileText } from 'lucide-react';
+
+type ViewMode = 'grid' | 'comparison' | 'analysis';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [searchResponse, setSearchResponse] = useState<SearchResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleSearch = async (query: string) => {
+    setIsLoading(true);
+    setError(null);
+    setSearchResponse(null);
+
+    try {
+      const response = await fetch('/api/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      const data: APIResponse<SearchResponse> = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Search failed');
+      }
+
+      if (data.data) {
+        setSearchResponse(data.data);
+        setViewMode('grid');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getWinnerInfo = (productId: string) => {
+    if (!searchResponse?.analysis) return undefined;
+
+    const { categoryWinners, overallRecommendation } = searchResponse.analysis;
+
+    if (overallRecommendation?.productId === productId) {
+      return { type: 'overall' as const, reason: overallRecommendation.reasoning };
+    }
+    if (categoryWinners?.bestValue?.productId === productId) {
+      return { type: 'value' as const, reason: categoryWinners.bestValue.reasoning };
+    }
+    if (categoryWinners?.bestBuild?.productId === productId) {
+      return { type: 'quality' as const, reason: categoryWinners.bestBuild.reasoning };
+    }
+    if (categoryWinners?.bestCamera?.productId === productId) {
+      return { type: 'features' as const, reason: categoryWinners.bestCamera.reasoning };
+    }
+
+    return undefined;
+  };
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <header className="text-center mb-12">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            AI Product Comparison
+          </h1>
+          <p className="text-xl text-gray-600">
+            Find the perfect product with AI-powered analysis from multiple sources
+          </p>
+        </header>
+
+        <SearchInterface onSearch={handleSearch} isLoading={isLoading} />
+
+        {error && (
+          <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+            <div>
+              <p className="font-semibold text-red-800">Search Error</p>
+              <p className="text-red-700 mt-1">{error}</p>
+            </div>
+          </div>
+        )}
+
+        {searchResponse && searchResponse.products.length > 0 && (
+          <>
+            {/* Only show AI Analysis - no grid or comparison tabs */}
+            <div className="mt-8">
+              {searchResponse.analysis && (
+                <>
+                  <AnalysisReport
+                    analysis={searchResponse.analysis}
+                    products={searchResponse.products}
+                  />
+
+                  {/* Single source link at the bottom */}
+                  <div className="mt-8 p-6 bg-white rounded-xl border border-gray-200 text-center">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Check Current Prices</h3>
+                    <div className="flex justify-center gap-4 flex-wrap">
+                      <a
+                        href={`https://www.noon.com/saudi-en/search?q=${encodeURIComponent(searchResponse.searchParams?.searchTerms || '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all"
+                      >
+                        View on Noon.com
+                      </a>
+                      <a
+                        href={`https://www.amazon.sa/s?k=${encodeURIComponent(searchResponse.searchParams?.searchTerms || '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all"
+                      >
+                        View on Amazon.sa
+                      </a>
+                      <a
+                        href={`https://www.jarir.com/sa-en/catalogsearch/result/?q=${encodeURIComponent(searchResponse.searchParams?.searchTerms || '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg font-semibold hover:from-red-600 hover:to-pink-600 transition-all"
+                      >
+                        View on Jarir.com
+                      </a>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-4">
+                      * Prices and availability may vary. Click links above to see current offerings.
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          </>
+        )}
+
+        {searchResponse && searchResponse.products.length === 0 && (
+          <div className="mt-12 text-center p-8 bg-gray-50 rounded-2xl">
+            <p className="text-gray-600">No products found for your search.</p>
+            <p className="text-gray-500 mt-2">Try adjusting your search terms.</p>
+          </div>
+        )}
+      </div>
+
+      <footer className="mt-20 py-8 border-t border-gray-200">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-gray-600">
+            AI Product Comparison Platform | Powered by Claude AI, Google Shopping & Amazon
+          </p>
+          <p className="text-sm text-gray-500 mt-2">
+            Prices and availability subject to change. We may earn commission from purchases.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
       </footer>
-    </div>
+    </main>
   );
 }
