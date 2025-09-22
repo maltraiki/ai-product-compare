@@ -4,20 +4,11 @@ import * as cheerio from 'cheerio';
 import { google } from 'googleapis';
 
 export class RealProductSearchClient {
-  private apiKey = process.env.GOOGLE_SHOPPING_API_KEY || '';
+  private apiKey = process.env.GOOGLE_SHOPPING_API_KEY || 'AIzaSyBUJN5Ae94uMZ_3hsVi7iZHUP8kfNTIC7s';
   private searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID || '76abaa4752feb43b0';
-  private auth: any;
 
   constructor() {
-    try {
-      this.auth = new google.auth.GoogleAuth({
-        keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-        scopes: ['https://www.googleapis.com/auth/cse'],
-      });
-      console.log('Using Google service account authentication');
-    } catch (error) {
-      console.log('Using API key authentication');
-    }
+    console.log('Using Google Custom Search API with key authentication');
   }
 
   async searchProducts(searchParams: SearchParams): Promise<Product[]> {
@@ -57,7 +48,7 @@ export class RealProductSearchClient {
 
         try {
           const response = await customsearch.cse.list({
-            auth: this.auth || this.apiKey,
+            auth: this.apiKey,
             cx: this.searchEngineId,
             q: searchQuery,
             num: 5
@@ -97,7 +88,7 @@ export class RealProductSearchClient {
           console.log(`Trying individual search for ${site}`);
 
           const response = await customsearch.cse.list({
-            auth: this.auth || this.apiKey,
+            auth: this.apiKey,
             cx: this.searchEngineId,
             q: siteQuery,
             num: 3
@@ -403,7 +394,7 @@ export class RealProductSearchClient {
       const searchQuery = `${query} buy price review specifications`;
 
       const response = await customsearch.cse.list({
-        auth: this.auth || this.apiKey,
+        auth: this.apiKey,
         cx: this.searchEngineId,
         q: searchQuery,
         num: 10
