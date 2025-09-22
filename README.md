@@ -1,6 +1,8 @@
 # AI Product Comparison Platform
 
-A comprehensive AI-powered product comparison platform that searches multiple sources (Google Shopping and Amazon) and provides intelligent analysis to help users make informed purchasing decisions.
+A comprehensive AI-powered product comparison platform that searches multiple sources (Noon.com, Amazon.sa, Jarir.com) and provides intelligent analysis to help users make informed purchasing decisions.
+
+🚀 **Live Demo**: Coming soon!
 
 ## Features
 
