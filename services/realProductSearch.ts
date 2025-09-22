@@ -34,9 +34,12 @@ export class RealProductSearchClient {
 
       // Fallback to regular Google search
       return await this.googleSearch(query);
-    } catch (error) {
-      console.error('Search error:', error);
-      return [];
+    } catch (error: any) {
+      console.error('Search error:', error.message || error);
+      if (error.response) {
+        console.error('API Response details:', error.response.data);
+      }
+      throw error; // Re-throw to see the error in the API route
     }
   }
 

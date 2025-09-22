@@ -66,23 +66,41 @@ export async function POST(request: NextRequest) {
     }
 
     // Always use real search - NO hardcoding
+    console.log('Starting product search for:', searchParams.searchTerms);
+
     const [productResults, amazonResults] = await Promise.allSettled([
       productSearchClient.searchProducts(searchParams),
       amazonClient.searchItems(searchParams)
     ]);
+
+    console.log('Search results:', {
+      productStatus: productResults.status,
+      amazonStatus: amazonResults.status,
+      productError: productResults.status === 'rejected' ? productResults.reason : null,
+      amazonError: amazonResults.status === 'rejected' ? amazonResults.reason : null
+    });
 
     const products: Product[] =
       productResults.status === 'fulfilled' ? productResults.value : [];
     const amazonProducts: Product[] =
       amazonResults.status === 'fulfilled' ? amazonResults.value : [];
 
+    console.log(`Found ${products.length} products from Google Search`);
+    console.log(`Found ${amazonProducts.length} products from Amazon`);
+
     // Combine all products
     const allProducts = [...products, ...amazonProducts];
 
     if (allProducts.length === 0) {
+      console.error('No products found at all');
+      console.error('Product search errors:', {
+        google: productResults.status === 'rejected' ? productResults.reason : 'No error but no results',
+        amazon: amazonResults.status === 'rejected' ? amazonResults.reason : 'No error but no results'
+      });
+
       return NextResponse.json<APIResponse<null>>({
         success: false,
-        error: 'No products found. Try searching for specific product names like "iPhone 16" or "Samsung Galaxy S24"',
+        error: `Search failed. Google: ${productResults.status === 'rejected' ? productResults.reason : 'No results'}. Check logs for details.`,
         timestamp: Date.now()
       }, { status: 404 });
     }
