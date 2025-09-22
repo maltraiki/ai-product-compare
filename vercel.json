@@ -1,9 +1,5 @@
 {
-  "env": {
-    "ANTHROPIC_API_KEY": "skip_not_required",
-    "CLAUDE_API_KEY": "skip_not_required",
-    "GEMINI_API_KEY": "AIzaSyDl4U9QrBjJ-Ijw3gJdtKEjkzyKIUO8wok",
-    "GOOGLE_SHOPPING_API_KEY": "AIzaSyBUJN5Ae94uMZ_3hsVi7iZHUP8kfNTIC7s",
-    "GOOGLE_SEARCH_ENGINE_ID": "76abaa4752feb43b0"
-  }
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs"
 }
