@@ -2,19 +2,14 @@
 
 import { useState } from 'react';
 import SearchInterface from '@/components/SearchInterface';
-import ProductCard from '@/components/ProductCard';
-import ComparisonTable from '@/components/ComparisonTable';
 import AnalysisReport from '@/components/AnalysisReport';
 import { SearchResponse, APIResponse } from '@/types';
-import { AlertCircle, BarChart3, Grid3X3, FileText } from 'lucide-react';
-
-type ViewMode = 'grid' | 'comparison' | 'analysis';
+import { AlertCircle } from 'lucide-react';
 
 export default function Home() {
   const [searchResponse, setSearchResponse] = useState<SearchResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
@@ -38,34 +33,12 @@ export default function Home() {
 
       if (data.data) {
         setSearchResponse(data.data);
-        setViewMode('grid');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const getWinnerInfo = (productId: string) => {
-    if (!searchResponse?.analysis) return undefined;
-
-    const { categoryWinners, overallRecommendation } = searchResponse.analysis;
-
-    if (overallRecommendation?.productId === productId) {
-      return { type: 'overall' as const, reason: overallRecommendation.reasoning };
-    }
-    if (categoryWinners?.bestValue?.productId === productId) {
-      return { type: 'value' as const, reason: categoryWinners.bestValue.reasoning };
-    }
-    if (categoryWinners?.bestBuild?.productId === productId) {
-      return { type: 'quality' as const, reason: categoryWinners.bestBuild.reasoning };
-    }
-    if (categoryWinners?.bestCamera?.productId === productId) {
-      return { type: 'features' as const, reason: categoryWinners.bestCamera.reasoning };
-    }
-
-    return undefined;
   };
 
   return (

@@ -4,7 +4,7 @@ import { GeminiAPIClient } from '@/services/geminiAPI';
 import { RealProductSearchClient } from '@/services/realProductSearch';
 import { AmazonAPIClient } from '@/services/amazonAPI';
 import { DataProcessor } from '@/services/dataProcessor';
-import { WebScraperService } from '@/services/webScraper';
+// import { WebScraperService } from '@/services/webScraper';
 import {
   SearchRequest,
   SearchResponse,
@@ -18,7 +18,7 @@ const geminiClient = new GeminiAPIClient();
 const productSearchClient = new RealProductSearchClient();
 const amazonClient = new AmazonAPIClient();
 const dataProcessor = new DataProcessor();
-const webScraper = new WebScraperService();
+// const webScraper = new WebScraperService();
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       amazonClient.searchItems(searchParams)
     ]);
 
-    let products: Product[] =
+    const products: Product[] =
       productResults.status === 'fulfilled' ? productResults.value : [];
     const amazonProducts: Product[] =
       amazonResults.status === 'fulfilled' ? amazonResults.value : [];
