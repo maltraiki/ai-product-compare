@@ -82,7 +82,7 @@ export class PhoneDatabase {
           display: {
             size: '6.9 inches',
             resolution: '2868 x 1320 pixels',
-            type: 'Super Retina XDR OLED',
+            technology: 'Super Retina XDR OLED',
             refreshRate: '120Hz',
             brightness: '2000 nits'
           },
@@ -134,7 +134,7 @@ export class PhoneDatabase {
           display: {
             size: '6.3 inches',
             resolution: '2622 x 1206 pixels',
-            type: 'Super Retina XDR OLED',
+            technology: 'Super Retina XDR OLED',
             refreshRate: '120Hz',
             brightness: '2000 nits'
           },
@@ -190,7 +190,7 @@ export class PhoneDatabase {
           display: {
             size: '6.7 inches',
             resolution: '2796 x 1290 pixels',
-            type: 'Super Retina XDR OLED',
+            technology: 'Super Retina XDR OLED',
             refreshRate: '120Hz',
             brightness: '2000 nits'
           },
@@ -279,7 +279,7 @@ export class PhoneDatabase {
           display: {
             size: '6.8 inches',
             resolution: '3120 x 1440 pixels',
-            type: 'Dynamic AMOLED 2X',
+            technology: 'Dynamic AMOLED 2X',
             refreshRate: '120Hz',
             brightness: '2600 nits'
           },
