@@ -399,20 +399,21 @@ export class ClaudeAPIClient {
   ): Promise<ComparisonAnalysis> {
     // Extract what the user wants to compare from their search query
     const comparisonPrompt = `
-You are a tech expert like MKBHD combined with GSMArena's depth. The user searched for: "${searchQuery}"
+You are a tech expert analyzing products. The user searched for: "${searchQuery}"
 
-Analyze what the user wants to compare. They might be asking for:
-- Direct product comparison (e.g., "iPhone 16 vs Samsung S24")
-- Brand comparison (e.g., "Apple vs Samsung phones")
-- Category search (e.g., "best gaming phones")
-- Feature comparison (e.g., "phones with best cameras")
+CRITICAL INSTRUCTIONS:
+1. ONLY analyze what the user searched for: "${searchQuery}"
+2. If they searched "iPhone 17", analyze iPhone 17 specifically
+3. If they searched "iPhone 17 vs Samsung S24", compare ONLY those two models
+4. DO NOT mention iPhone 15, iPhone 16, or any other models unless the user specifically searched for them
+5. If the exact product doesn't exist yet (like iPhone 17), acknowledge this and provide analysis based on rumors, expected features, and comparisons with current models
 
-Based on the search "${searchQuery}", create a detailed comparison analysis.
+The user's EXACT search was: "${searchQuery}"
 
-Available products found (use these for reference but focus on what the user asked for):
+Available products from search (for reference only - focus on what user asked for):
 ${JSON.stringify(products.slice(0, 5).map(p => ({ title: p.title, price: p.price, features: p.features?.slice(0, 3) })))}
 
-Create a comprehensive analysis that addresses EXACTLY what the user searched for. If they asked for "iPhone 16 vs Samsung S24", compare those specific models. If products aren't available, explain what's available instead.
+Create an analysis that addresses EXACTLY "${searchQuery}". Never mention other products unless directly relevant to the comparison requested.
 
 Return a detailed JSON with your analysis following this structure:
 {

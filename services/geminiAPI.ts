@@ -25,16 +25,18 @@ export class GeminiAPIClient {
     }
 
     const prompt = `
-You are a tech expert analyzing products. The user searched for: "${searchQuery}"
+You are a tech expert. The user searched for: "${searchQuery}"
 
-Analyze what the user wants to compare:
-- If it's a versus comparison (e.g., "iPhone 16 vs Samsung S24"), compare those specific products
-- If it's a brand comparison (e.g., "Apple vs Samsung"), compare the brands
-- If it's a category search (e.g., "best phones"), recommend the best options
+STRICT RULES:
+1. ONLY analyze "${searchQuery}" - nothing else
+2. If user searched "iPhone 17", ONLY discuss iPhone 17
+3. NEVER mention iPhone 15 or iPhone 16 unless user specifically searched for them
+4. If product doesn't exist yet (like iPhone 17), discuss expected features and rumors
+5. Focus ONLY on what was searched: "${searchQuery}"
 
-Focus on answering EXACTLY what the user searched for: "${searchQuery}"
+User's exact search: "${searchQuery}"
 
-Available products (use for reference):
+Available products (reference only):
 ${JSON.stringify(products.slice(0, 5).map(p => ({ title: p.title, price: p.price })))}
 
 Return JSON:
