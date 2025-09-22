@@ -1,70 +1,9 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": "nextjs",
   "env": {
-    "CLAUDE_API_KEY": "@claude-api-key",
-    "GOOGLE_SHOPPING_API_KEY": "@google-shopping-api-key",
-    "GOOGLE_APPLICATION_CREDENTIALS": "@google-application-credentials",
-    "GOOGLE_MERCHANT_ID": "@google-merchant-id",
-    "AMAZON_ACCESS_KEY_ID": "@amazon-access-key-id",
-    "AMAZON_SECRET_ACCESS_KEY": "@amazon-secret-access-key",
-    "AMAZON_ASSOCIATE_TAG": "@amazon-associate-tag",
-    "REDIS_URL": "@redis-url"
-  },
-  "functions": {
-    "app/api/search/route.ts": {
-      "maxDuration": 30
-    },
-    "app/api/analyze/route.ts": {
-      "maxDuration": 30
-    }
-  },
-  "regions": ["iad1"],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "no-store, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        }
-      ]
-    }
-  ]
+    "ANTHROPIC_API_KEY": "skip_not_required",
+    "CLAUDE_API_KEY": "skip_not_required",
+    "GEMINI_API_KEY": "AIzaSyDl4U9QrBjJ-Ijw3gJdtKEjkzyKIUO8wok",
+    "GOOGLE_SHOPPING_API_KEY": "AIzaSyBUJN5Ae94uMZ_3hsVi7iZHUP8kfNTIC7s",
+    "GOOGLE_SEARCH_ENGINE_ID": "76abaa4752feb43b0"
+  }
 }
