@@ -75,7 +75,7 @@ export class RealProductSearchClient {
       // Process all items
       for (const item of allItems) {
         // Skip non-product pages
-        if (this.isProductPage(item.link, item.title)) {
+        if (item.link && item.title && this.isProductPage(item.link, item.title)) {
           const product = this.extractProductFromSearchResult(item, item.source);
           if (product) {
             products.push(product);
@@ -105,7 +105,7 @@ export class RealProductSearchClient {
 
           if (response.data.items) {
             for (const item of response.data.items) {
-              if (this.isProductPage(item.link, item.title)) {
+              if (item.link && item.title && this.isProductPage(item.link, item.title)) {
                 const product = this.extractProductFromSearchResult(item, site);
                 if (product) {
                   products.push(product);
@@ -416,7 +416,7 @@ export class RealProductSearchClient {
       const products: Product[] = [];
 
       for (const item of response.data.items) {
-        if (this.isProductPage(item.link, item.title)) {
+        if (item.link && item.title && this.isProductPage(item.link, item.title)) {
           const product = this.extractProductFromSearchResult(item, 'google');
           if (product) {
             products.push(product);
