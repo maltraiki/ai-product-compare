@@ -8,8 +8,8 @@ export class RealProductSearchClient {
   private searchEngineId: string;
 
   constructor() {
-    // Use hardcoded fallback API key if environment variable is not set
-    this.apiKey = process.env.GOOGLE_SHOPPING_API_KEY || 'AIzaSyBUJN5Ae94uMZ_3hsVi7iZHUP8kfNTIC7s';
+    // API key must be set in environment variables
+    this.apiKey = process.env.GOOGLE_SHOPPING_API_KEY || '';
     this.searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID || '76abaa4752feb43b0';
 
     console.log('Using Google Custom Search API with key authentication');
