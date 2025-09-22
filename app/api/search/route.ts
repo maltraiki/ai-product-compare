@@ -119,21 +119,29 @@ export async function POST(request: NextRequest) {
       } catch (geminiError) {
         console.log('Both AI services failed, using basic analysis');
         // Basic fallback analysis
+        const firstProduct = normalizedProducts[0];
         analysis = {
           executiveSummary: `Analysis of "${body.query}". Found ${normalizedProducts.length} related products from various retailers.`,
           overallRecommendation: {
-            productId: normalizedProducts[0]?.id || '',
+            productId: firstProduct?.id || '',
             reasoning: 'Selected based on availability and features.',
             confidenceScore: 70
           },
-          categoryWinners: {},
+          categoryWinners: {
+            bestDisplay: { productId: firstProduct?.id || '', reasoning: 'Display quality', technicalDetails: 'Standard display', score: 75 },
+            bestCamera: { productId: firstProduct?.id || '', reasoning: 'Camera features', technicalDetails: 'Standard camera', score: 75 },
+            bestPerformance: { productId: firstProduct?.id || '', reasoning: 'Performance', benchmarkData: 'Standard performance', score: 75 },
+            bestBattery: { productId: firstProduct?.id || '', reasoning: 'Battery life', realWorldTesting: 'Standard battery', score: 75 },
+            bestValue: { productId: firstProduct?.id || '', reasoning: 'Value proposition', costBreakdown: 'Competitive pricing', score: 75 },
+            bestBuild: { productId: firstProduct?.id || '', reasoning: 'Build quality', materialsComparison: 'Standard materials', score: 75 }
+          },
           specificationComparisons: {},
           performanceAnalysis: {},
           valueAnalysis: {},
           userRecommendations: {},
           prosAndCons: {},
           finalVerdict: {
-            overallWinner: normalizedProducts[0]?.title || '',
+            overallWinner: firstProduct?.title || '',
             percentageScore: 70,
             scenarios: [],
             longTermAnalysis: 'Analysis based on available data.'
